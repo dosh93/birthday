@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -17,11 +18,12 @@ public class People {
 
     @Column
     @NotNull(message = "Заполнить имя")
+    @Size(min = 1, message = "Имя должно содержать минимум 1 символ")
     private String name;
 
     @Column
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    @NotNull(message = "Заполнить ДР")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Нужно заполнить ДР")
     private Date birthday;
 
     @OneToMany(mappedBy = "who", fetch = FetchType.EAGER)

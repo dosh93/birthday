@@ -1,14 +1,22 @@
 package ru.open.birthday.controller;
 
+import freemarker.core.AliasTemplateDateFormatFactory;
+import freemarker.core.TemplateDateFormatFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ru.open.birthday.entity.People;
 import ru.open.birthday.service.PeopleService;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +34,8 @@ public class PeopleController {
         return "people/people";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deletePeople(@PathVariable Integer id){
+    @PostMapping("/delete/{id}")
+    public String  deletePeople(@PathVariable Integer id){
         peopleService.delete(peopleService.findById(id));
         return "redirect:/people";
     }
@@ -36,6 +44,7 @@ public class PeopleController {
     public String addPeoplePage(Model model){
         People people = new People();
         model.addAttribute("people", people);
+        model.addAttribute("path", "/people/add-people");
         return "people/add_people";
     }
 
@@ -44,6 +53,28 @@ public class PeopleController {
         if (bindingResult.hasErrors()){
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errors);
+            model.addAttribute("path", "/people/add-people");
+            return "people/add_people";
+        }
+        peopleService.createPeople(people);
+        return "redirect:/people";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editPeoplePage(@PathVariable Integer id, Model model){
+        People people = peopleService.findById(id);
+        model.addAttribute("people", people);
+        model.addAttribute("path", "/people/" + id + "/edit");
+        return "people/add_people";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editPeople(@PathVariable Integer id, @Valid People people, BindingResult bindingResult, Model model){
+        people.setId(id);
+        if (bindingResult.hasErrors()){
+            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
+            model.mergeAttributes(errors);
+            model.addAttribute("path", "/people/" + id + "/edit");
             return "people/add_people";
         }
         peopleService.createPeople(people);

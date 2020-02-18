@@ -1,7 +1,7 @@
 <#import "../main/common.ftl" as c>
 
 <@c.page>
-    <table class="table table-dark">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col">Имя</th>
@@ -13,11 +13,18 @@
         <#list peopleList as people>
             <tr>
                 <td>${people.name}</td>
-                <td>${people.birthday?date}</td>
-                <td><a href="/people/delete/${people.id}" type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a></td>
+                <td>${people.birthday?date?string('MMM dd')}</td>
+                <td>
+                    <form action="/people/delete/${people.id}" method="post">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="submit" class="btn btn-danger btn-sm" role="button"><i class="fas fa-trash"></i></button>
+                            <a href="/people/${people.id}/edit" class="btn btn-success btn-sm" role="button"><i class="fas fa-edit"></i></a>
+                        </div>
+                    </form>
+                </td>
             </tr>
         </#list>
-
         </tbody>
     </table>
+    <a href="/people/add-people" class="btn btn-primary">Добавить</a>
 </@c.page>
