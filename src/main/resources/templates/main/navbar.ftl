@@ -12,6 +12,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/people/">Сотрудники</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/config/update/">Настройки</a>
+            </li>
         </ul>
     </div>
 </nav>

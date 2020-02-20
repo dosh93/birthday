@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.open.birthday.entity.People;
+import ru.open.birthday.service.ConfigService;
 import ru.open.birthday.service.PeopleService;
 
 import java.util.Comparator;
@@ -17,16 +18,25 @@ public class MainController {
     @Autowired
     private PeopleService peopleService;
 
+    @Autowired
+    private ConfigService configService;
+
+
     @GetMapping("")
     public String homePage(Model model){
-        List<People> all = peopleService.findAllByCountDaysParam(3, 3);
+        Integer dayTo = Integer.parseInt(configService.getValueByKey("dayTo"));
+        Integer dayAfter = Integer.parseInt(configService.getValueByKey("dayAfter"));
+
+        List<People> all = peopleService.findAllByCountDaysParam(dayTo, dayAfter);
         peopleService.setDaysCount(all);
+
         all.sort(new Comparator<People>() {
             @Override
             public int compare(People o1, People o2) {
                 return (int) (o1.getCountDays() - o2.getCountDays());
             }
         });
+
         model.addAttribute("peopleList", all);
         return "home";
     }
