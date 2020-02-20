@@ -37,4 +37,9 @@ public class PeopleService {
         peopleRepository.delete(people);
     }
 
+    @Transactional
+    public List<People> searchPeople(String query){
+        return peopleRepository.findAllByNameContaining(query);
+    }
+
 }

@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "people")
+@Table(name = "people", schema = "public")
 public class People {
 
     @Id
