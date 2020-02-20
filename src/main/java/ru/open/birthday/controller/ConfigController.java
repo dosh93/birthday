@@ -36,7 +36,7 @@ public class ConfigController {
             config.setValue(entry.getValue());
             configService.save(config);
         }
-        return "redirect:/home";
+        return "redirect:/";
     }
 
 }

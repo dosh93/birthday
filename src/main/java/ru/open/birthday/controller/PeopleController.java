@@ -1,22 +1,14 @@
 package ru.open.birthday.controller;
 
-import freemarker.core.AliasTemplateDateFormatFactory;
-import freemarker.core.TemplateDateFormatFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ru.open.birthday.entity.People;
 import ru.open.birthday.service.PeopleService;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
