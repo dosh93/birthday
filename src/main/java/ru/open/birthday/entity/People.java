@@ -32,6 +32,17 @@ public class People {
     @OneToMany(mappedBy = "whom", fetch = FetchType.EAGER)
     private List<DepositedMoney> whoms;
 
+    @Transient
+    private Long countDays;
+
+    public Long getCountDays() {
+        return countDays;
+    }
+
+    public void setCountDays(Long countDays) {
+        this.countDays = countDays;
+    }
+
     public Integer getId() {
         return id;
     }

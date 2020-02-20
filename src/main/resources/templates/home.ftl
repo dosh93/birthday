@@ -14,7 +14,14 @@
         </thead>
         <tbody>
         <#list peopleList as people>
-            <tr>
+            <#if (people.countDays < 0)>
+                <tr class="table-danger">
+            <#elseif (people.countDays > 0)>
+                <tr class="table-primary">
+            <#else>
+                <tr class="table-success">
+            </#if>
+
                 <td>${people.name}</td>
                 <td>${people.birthday?date?string('MMM dd')}</td>
                 <td>
