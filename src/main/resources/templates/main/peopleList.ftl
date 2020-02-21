@@ -9,7 +9,7 @@
     </#if>
 
     <td>${people.name}</td>
-    <td>${people.birthday?date?string('MMM dd')}</td>
+    <td>${people.birthday?date?string('MMM dd')} (до ДР ${people.countDays} дней)</td>
     <td>
         <form action="/people/delete/${people.id}" method="post">
             <div class="btn-group" role="group" aria-label="Basic example">

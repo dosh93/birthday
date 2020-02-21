@@ -54,11 +54,6 @@ public class PeopleService {
         return peopleRepository.findAllByNameContainingOrderByName(query);
     }
 
-    @Transactional
-    public List<People> findAllByCountDaysParamAndContainName(Integer dayTo, Integer dayAfter, String name){
-        return peopleRepository.peoplesBirthday( dayTo,  dayAfter, name);
-    }
-
     public void setDaysCount(List<People> all) {
         Integer dayAfter = Integer.parseInt(configService.getValueByKey("dayAfter"));
         for (People people: all) {
