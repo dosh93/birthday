@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.open.birthday.entity.People;
+import ru.open.birthday.helper.DateHelper;
 import ru.open.birthday.repository.PeopleRepository;
 
 import java.text.ParseException;
@@ -59,36 +60,14 @@ public class PeopleService {
     }
 
     public void setDaysCount(List<People> all) {
+        Integer dayAfter = Integer.parseInt(configService.getValueByKey("dayAfter"));
         for (People people: all) {
-            Date date = people.getBirthday();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy");
-            Date birthdayCurrentYear = null;
-            Date currentDate = null;
-            Calendar birthday =  Calendar.getInstance();
-            birthday.setTime(date);
-            Calendar current = Calendar.getInstance();
-            String year = String.valueOf(current.get(Calendar.YEAR));
-            String month = String.valueOf(birthday.get(Calendar.MONTH) + 1).length() == 1 ?  "0" + (birthday.get(Calendar.MONTH) + 1) : String.valueOf(birthday.get(Calendar.MONTH) + 1);
-            String day = String.valueOf(birthday.get(Calendar.DAY_OF_MONTH)).length() == 1 ?  "0" + birthday.get(Calendar.DAY_OF_MONTH) : String.valueOf(birthday.get(Calendar.DAY_OF_MONTH));
-            String birthdayCurrentYearString = day + month + year;
-
-            try {
-                birthdayCurrentYear = simpleDateFormat.parse(birthdayCurrentYearString);
-            } catch (ParseException e) {
-                people.setCountDays(null);
+            Long daysBeforeBirthday = DateHelper.getDaysBeforeBirthday(people.getBirthday());
+            if (daysBeforeBirthday + dayAfter > DateHelper.getCountDayCurrentYear()){
+                people.setCountDays(daysBeforeBirthday - DateHelper.getCountDayCurrentYear());
+            }else {
+                people.setCountDays(daysBeforeBirthday);
             }
-
-            month = String.valueOf(current.get(Calendar.MONTH) + 1).length() == 1 ?  "0" + (current.get(Calendar.MONTH) + 1) : String.valueOf(current.get(Calendar.MONTH) + 1);
-            day = String.valueOf(current.get(Calendar.DAY_OF_MONTH)).length() == 1 ?  "0" + current.get(Calendar.DAY_OF_MONTH) : String.valueOf(current.get(Calendar.DAY_OF_MONTH));
-
-            try {
-                currentDate = simpleDateFormat.parse(day + month + year);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            Long dayToBirthday = (birthdayCurrentYear.getTime() - currentDate.getTime())/1000/60/60/24;
-            people.setCountDays(dayToBirthday);
         }
     }
 
@@ -97,8 +76,12 @@ public class PeopleService {
         if (sortBirthday){
             Integer dayTo = Integer.parseInt(configService.getValueByKey("dayTo"));
             Integer dayAfter = Integer.parseInt(configService.getValueByKey("dayAfter"));
-            peopleList = findAllByCountDaysParamAndContainName(dayTo, dayAfter, "%" + name + "%");
+            peopleList = searchPeople(name);
             setDaysCount(peopleList);
+            List<People> peopleListCurr = new ArrayList<>(peopleList);
+            for (People people: peopleListCurr) {
+                if (!(people.getCountDays() <= dayTo) || !((people.getCountDays() *  -1) <= dayAfter)) peopleList.remove(people);
+            }
             peopleList.sort(new Comparator<People>() {
                 @Override
                 public int compare(People o1, People o2) {
