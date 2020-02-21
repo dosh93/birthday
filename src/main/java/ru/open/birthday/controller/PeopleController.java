@@ -21,7 +21,7 @@ public class PeopleController {
 
     @GetMapping("")
     public String getPeoplePage(Model model){
-        List<People> all = peopleService.findAll();
+        List<People> all = peopleService.getListPeopleByFilter(false, "");
         model.addAttribute("peopleList", all);
         return "people/people";
     }
@@ -48,6 +48,7 @@ public class PeopleController {
             model.addAttribute("path", "/people/add-people");
             return "people/add_people";
         }
+        people.setId(peopleService.getMaxId() + 1);
         peopleService.createPeople(people);
         return "redirect:/people";
     }

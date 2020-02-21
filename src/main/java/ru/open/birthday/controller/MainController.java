@@ -6,10 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.open.birthday.entity.People;
-import ru.open.birthday.service.ConfigService;
 import ru.open.birthday.service.PeopleService;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -18,34 +16,17 @@ public class MainController {
     @Autowired
     private PeopleService peopleService;
 
-    @Autowired
-    private ConfigService configService;
-
 
     @GetMapping("")
     public String homePage(Model model){
-        Integer dayTo = Integer.parseInt(configService.getValueByKey("dayTo"));
-        Integer dayAfter = Integer.parseInt(configService.getValueByKey("dayAfter"));
-
-        List<People> all = peopleService.findAllByCountDaysParam(dayTo, dayAfter);
-        peopleService.setDaysCount(all);
-
-        all.sort(new Comparator<People>() {
-            @Override
-            public int compare(People o1, People o2) {
-                return (int) (o1.getCountDays() - o2.getCountDays());
-            }
-        });
-
+        List<People> all = peopleService.getListPeopleByFilter(true, "");
         model.addAttribute("peopleList", all);
         return "home";
     }
 
     @GetMapping("/search-people")
-    public String peopleSearch(@RequestParam String query, Model model){
-        List<People> people = null;
-        if (query.equals("")) people = peopleService.findAll();
-        else people= peopleService.searchPeople(query);
+    public String peopleSearch(@RequestParam String query, @RequestParam boolean birthday, Model model){
+        List<People> people = peopleService.getListPeopleByFilter(birthday, query);
         model.addAttribute("peopleList", people);
         return "main/peopleList";
     }

@@ -8,17 +8,19 @@ import ru.open.birthday.repository.PeopleRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PeopleService {
     @Autowired
     private final PeopleRepository peopleRepository;
 
-    public PeopleService(PeopleRepository peopleRepository) {
+    @Autowired
+    private final ConfigService configService;
+
+    public PeopleService(PeopleRepository peopleRepository, ConfigService configService) {
         this.peopleRepository = peopleRepository;
+        this.configService = configService;
     }
 
     @Transactional
@@ -29,6 +31,11 @@ public class PeopleService {
     @Transactional
     public List<People> findAll(){
         return peopleRepository.findAll();
+    }
+
+    @Transactional
+    public Integer getMaxId(){
+        return peopleRepository.getMaxId();
     }
 
     @Transactional
@@ -47,8 +54,8 @@ public class PeopleService {
     }
 
     @Transactional
-    public List<People> findAllByCountDaysParam(Integer dayTo, Integer dayAfter){
-        return peopleRepository.peoplesBirthday( dayTo,  dayAfter);
+    public List<People> findAllByCountDaysParamAndContainName(Integer dayTo, Integer dayAfter, String name){
+        return peopleRepository.peoplesBirthday( dayTo,  dayAfter, name);
     }
 
     public void setDaysCount(List<People> all) {
@@ -83,5 +90,25 @@ public class PeopleService {
             Long dayToBirthday = (birthdayCurrentYear.getTime() - currentDate.getTime())/1000/60/60/24;
             people.setCountDays(dayToBirthday);
         }
+    }
+
+    public List<People> getListPeopleByFilter(Boolean sortBirthday, String name){
+        List<People> peopleList = new ArrayList<>();
+        if (sortBirthday){
+            Integer dayTo = Integer.parseInt(configService.getValueByKey("dayTo"));
+            Integer dayAfter = Integer.parseInt(configService.getValueByKey("dayAfter"));
+            peopleList = findAllByCountDaysParamAndContainName(dayTo, dayAfter, "%" + name + "%");
+            setDaysCount(peopleList);
+            peopleList.sort(new Comparator<People>() {
+                @Override
+                public int compare(People o1, People o2) {
+                    return (int) (o1.getCountDays() - o2.getCountDays());
+                }
+            });
+        } else {
+            peopleList = searchPeople(name);
+            setDaysCount(peopleList);
+        }
+        return peopleList;
     }
 }

@@ -8,12 +8,12 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
+
 @Entity
 @Table(name = "people", schema = "public")
 public class People {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
