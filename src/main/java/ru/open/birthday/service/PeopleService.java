@@ -50,7 +50,7 @@ public class PeopleService {
 
     @Transactional
     public List<People> searchPeople(String query){
-        return peopleRepository.findAllByNameContaining(query);
+        return peopleRepository.findAllByNameContainingOrderByName(query);
     }
 
     @Transactional
