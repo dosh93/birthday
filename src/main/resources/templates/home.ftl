@@ -8,6 +8,7 @@
     <table class="table table-hover" id="tablePeople">
         <thead>
         <tr>
+            <th scope="col">Сдать</th>
             <th scope="col">Имя</th>
             <th scope="col">День Рождение</th>
             <th scope="col">Действия</th>

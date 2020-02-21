@@ -10,3 +10,8 @@ $("#searchPeople").on("keyup",function(){
         }
     })
 });
+
+$("tr.table-danger").on("click", function () {
+   var id = $(this).attr("id").split("-")[1];
+   $("#givePeople-" + id).attr('checked', true);
+});

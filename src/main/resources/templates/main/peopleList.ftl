@@ -1,13 +1,14 @@
 <tbody>
 <#list peopleList as people>
-    <#if (people.countDays < 0)>
-        <tr class="table-danger">
-    <#elseif (people.countDays > 0)>
-        <tr class="table-primary">
-    <#else>
-        <tr class="table-success">
-    </#if>
 
+    <tr class="table-<#if (people.countDays < 0)>danger<#elseif (people.countDays > 0)>primary<#else>success</#if>" id="linePeople-${people.id}">
+    <#if isGive??>
+        <td>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="givePeople-${people.id}">
+            </div>
+        </td>
+    </#if>
     <td>${people.name}</td>
     <td>${people.birthday?date?string('MMM dd')} (до ДР ${people.countDays} дней)</td>
     <td>

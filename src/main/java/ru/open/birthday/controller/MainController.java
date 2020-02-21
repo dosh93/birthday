@@ -20,6 +20,7 @@ public class MainController {
     @GetMapping("")
     public String homePage(Model model){
         List<People> all = peopleService.getListPeopleByFilter(true, "");
+        model.addAttribute("isGive", true);
         model.addAttribute("peopleList", all);
         return "home";
     }
@@ -27,6 +28,7 @@ public class MainController {
     @GetMapping("/search-people")
     public String peopleSearch(@RequestParam String query, @RequestParam boolean birthday, Model model){
         List<People> people = peopleService.getListPeopleByFilter(birthday, query);
+        if(birthday) model.addAttribute("isGive", true);
         model.addAttribute("peopleList", people);
         return "main/peopleList";
     }
