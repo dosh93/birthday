@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 public class DepositedMoney {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

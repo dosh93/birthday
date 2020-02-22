@@ -1,5 +1,7 @@
 package ru.open.birthday.repository;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.open.birthday.entity.People;
@@ -12,6 +14,4 @@ public interface PeopleRepository extends JpaRepository<People, Integer> {
 
     @Query(value = "SELECT MAX(id) FROM People p")
     Integer getMaxId();
-
-
 }

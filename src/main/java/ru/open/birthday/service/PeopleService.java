@@ -1,14 +1,13 @@
 package ru.open.birthday.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.open.birthday.entity.People;
 import ru.open.birthday.helper.DateHelper;
 import ru.open.birthday.repository.PeopleRepository;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -88,5 +87,11 @@ public class PeopleService {
             setDaysCount(peopleList);
         }
         return peopleList;
+    }
+
+    public void setIsGive(List<People> peopleList, List<Integer> givePeople) {
+        for (People people: peopleList) {
+            people.setGive(givePeople.contains(people.getId()));
+        }
     }
 }

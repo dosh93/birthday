@@ -35,6 +35,17 @@ public class People {
     @Transient
     private Long countDays;
 
+    @Transient
+    private boolean give;
+
+    public boolean isGive() {
+        return give;
+    }
+
+    public void setGive(boolean give) {
+        this.give = give;
+    }
+
     public Long getCountDays() {
         return countDays;
     }
