@@ -2,6 +2,7 @@ package ru.open.birthday.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.open.birthday.entity.People;
@@ -93,5 +94,9 @@ public class PeopleService {
         for (People people: peopleList) {
             people.setGive(givePeople.contains(people.getId()));
         }
+    }
+
+    public List<People> findAllByNameContainingOrderByName(String name, Pageable pageable){
+        return peopleRepository.findAllByNameContainingOrderByName(name, pageable);
     }
 }

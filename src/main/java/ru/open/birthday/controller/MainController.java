@@ -1,6 +1,8 @@
 package ru.open.birthday.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +44,13 @@ public class MainController {
         if(birthday) model.addAttribute("isGive", true);
         model.addAttribute("peopleList", people);
         return "main/peopleList";
+    }
+
+    @GetMapping("/getOptionPeople")
+    public String getOptionPeople(@RequestParam String query, Model model){
+        List<People> peopleList = peopleService.findAllByNameContainingOrderByName(query, PageRequest.of(0, 2));
+        model.addAttribute("peopleListWho", peopleList);
+        return "main/optionalPeople";
     }
 
     @GetMapping("/sendMoneyAll")

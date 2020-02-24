@@ -14,4 +14,6 @@ public interface PeopleRepository extends JpaRepository<People, Integer> {
 
     @Query(value = "SELECT MAX(id) FROM People p")
     Integer getMaxId();
+
+    List<People> findAllByNameContainingOrderByName(String name, Pageable pageable);
 }

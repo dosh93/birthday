@@ -39,10 +39,24 @@ $('#sendMoney').on("click", function () {
             $("#successesMessage").append(data);
             $('#hidden_people_selected').val('')
             $('#money').val('')
-            $("input[name='givePeople']:checked").each(function () {
+            $("input[name='givePeople']:checked").each(function (index) {
+                console.log(index);
                 $(this).attr('checked',false);
             });
-            $("button[data-id='people_selected']").attr('title','');
+            $('select').selectpicker('val', '0');
         }
     })
 });
+
+
+("input[aria-label='Search']").on("keyup",function(){
+
+    $.ajax({
+        url: "/getOptionPeople?query=" + $("input[aria-label='Search']").val(),
+        cache: false,
+        success: function(data){
+            $("#people_selected").html(data).selectpicker('refresh');
+        }
+    })
+});
+
